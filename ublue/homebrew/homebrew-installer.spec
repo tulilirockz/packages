@@ -27,7 +27,7 @@ curl --retry 3 -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/
 chmod +x /tmp/brew-install
 mkdir -p /tmp/fakehome
 echo "root:x:0:0:root:/root:/bin/bash" > /tmp/fakepasswd
-bwrap \
+sudo bwrap \
 	--ro-bind /usr /usr \
 	--ro-bind /lib /lib \
 	--ro-bind /lib64 /lib64 \
