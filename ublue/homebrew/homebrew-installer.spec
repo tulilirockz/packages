@@ -27,23 +27,10 @@ curl --retry 3 -Lo /tmp/brew-install https://raw.githubusercontent.com/Homebrew/
 chmod +x /tmp/brew-install
 mkdir -p /tmp/fakehome
 echo "root:x:0:0:root:/root:/bin/bash" > /tmp/fakepasswd
-sudo bwrap \
-	--ro-bind /usr /usr \
-	--ro-bind /lib /lib \
-	--ro-bind /lib64 /lib64 \
-	--ro-bind /tmp/fakepasswd /etc/passwd \
-	--ro-bind /etc /etc \
-	--bind /tmp /tmp \
-	--bind /bin /bin \
-	--bind /tmp/fakehome /home \
-	--dev /dev \
-	--proc /proc \
-	--uid 0 \
-	--gid 0 \
-	/usr/bin/bash -c "touch /.dockerenv ; env --ignore-environment HOME=/home/linuxbrew NONINTERACTIVE=1 /tmp/brew-install"
-
+sudo touch /.dockerenv 
+env --ignore-environment HOME=/home/linuxbrew NONINTERACTIVE=1 /tmp/brew-install
 mkdir -p %{buildroot}%{_datadir}
-tar --zstd -cvf homebrew.tar.zst /tmp/fakehome/linuxbrew &>/dev/null
+tar --zstd -cvf homebrew.tar.zst /home/linuxbrew &>/dev/null
 
 %install
 install -Dm0755 homebrew.tar.zst %{buildroot}%{_datadir}/homebrew.tar.zst
